@@ -32,24 +32,28 @@ public class UntrackCommand implements Command {
     public SendMessage handle(Update update) {
         long chatId = update.message().chat().id();
         String text = update.message().text();
+        Optional<User> user = userService.findChatById(chatId);
 
-        String[] split = text.split("\\s+");
-        String link = split[1];
+        if (user.isPresent()) {
+            String[] splittedText = text.split("\\s+");
 
-        Optional<User> initiator = userService.findChatById(chatId);
-        List<String> links;
+            if (splittedText.length == 1) {
+                return new SendMessage(chatId, "Нужно ввести команду вида /untrack <link>");
+            }
 
-        if (initiator.isPresent()) {
-            links = initiator.get().getLinks();
+            String link = splittedText[1];
+            List<String> links = user.get().getLinks();
             boolean containsLink = userService.deleteLink(new User(chatId, links), link);
 
             if (!containsLink) {
                 logger.info("Resource %s has not been tracked before".formatted(link));
                 return new SendMessage(chatId, "Ресурс %s ранее не отслеживался".formatted(link));
             }
+
+            logger.info("Resource %s was successfully removed from the tracked".formatted(link));
+            return new SendMessage(chatId, "Отслеживвание ресура %s прекращено".formatted(link));
         }
 
-        logger.info("Resource %s was successfully removed from the tracked".formatted(link));
-        return new SendMessage(chatId, "Отслеживвание ресура %s прекращено".formatted(link));
+        return new SendMessage(chatId, "Для начала зарегистрируйтесь при помощи команды /start");
     }
 }
