@@ -20,7 +20,6 @@ public class HelpCommand implements Command {
 
     public HelpCommand(List<Command> commands) {
         this.commands = commands;
-        addCommandsToText();
     }
 
     @Override
@@ -35,6 +34,7 @@ public class HelpCommand implements Command {
 
     @Override
     public SendMessage handle(Update update) {
+        addCommandsToText();
         return new SendMessage(update.message().chat().id(), text.toString());
     }
 }

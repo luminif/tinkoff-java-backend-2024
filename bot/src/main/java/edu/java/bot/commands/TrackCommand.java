@@ -34,35 +34,38 @@ public class TrackCommand implements Command {
     public SendMessage handle(Update update) {
         long chatId = update.message().chat().id();
         String text = update.message().text();
+        Optional<User> user = userService.findChatById(chatId);
 
-        String[] split = text.split("\\s+");
+        if (user.isPresent()) {
+            String[] splittedText = text.split("\\s+");
 
-        if (split.length == 1) {
-            return new SendMessage(chatId, "Нужно ввести команду вида /track <link>");
-        }
-
-        String link = split[1];
-        LinkParser linkParser = new LinkParser(link);
-
-        if (!linkParser.checkLink()) {
-            logger.info("Resource %s is not supported".formatted(link));
-            return new SendMessage(chatId, "Данный ресурс не поддерживается!");
-        }
-
-        Optional<User> initiator = userService.findChatById(chatId);
-        List<String> links;
-
-        if (initiator.isPresent()) {
-            links = initiator.get().getLinks();
-            boolean add = userService.addLink(new User(chatId, links), link);
-
-            if (add) {
-                logger.info("Resource %s is already being tracked".formatted(link));
-                return new SendMessage(chatId, "Ресурс %s ранее был добавлен в список отслеживаемых".formatted(link));
+            if (splittedText.length == 1) {
+                return new SendMessage(chatId, "Нужно ввести команду вида /track <link>");
             }
+
+            String link = splittedText[1];
+            LinkParser linkParser = new LinkParser(link);
+
+            if (!linkParser.checkLink()) {
+                logger.info("Resource %s is not supported".formatted(link));
+                return new SendMessage(chatId, "Данный ресурс не поддерживается!");
+            }
+
+            List<String> links = user.get().getLinks();
+            boolean linkIsAdded = userService.addLink(new User(chatId, links), link);
+            String responseMessage;
+
+            if (linkIsAdded) {
+                logger.info("Resource %s is already being tracked".formatted(link));
+                responseMessage = "Ресурс %s ранее был добавлен в список отслеживаемых".formatted(link);
+            } else {
+                responseMessage = "Ресурс %s добавлен в список отслеживаемых".formatted(link);
+                logger.info("Resource %s is being successfully tracked".formatted(link));
+            }
+
+            return new SendMessage(chatId, responseMessage);
         }
 
-        logger.info("Resource %s is being successfully tracked".formatted(link));
-        return new SendMessage(chatId, "Ресурс %s добавлен в список отслеживаемых".formatted(link));
+        return new SendMessage(chatId, "Для начала зарегистрируйтесь при помощи команды /start");
     }
 }
