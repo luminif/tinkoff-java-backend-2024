@@ -1,23 +1,37 @@
 package edu.java.bot.commands;
 
-import edu.java.bot.services.UserService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class StartCommandTest {
-    private UserService userService;
+@ExtendWith(MockitoExtension.class)
+public class StartCommandTest extends CommandTest {
+    @InjectMocks
+    private StartCommand startCommand;
 
     @Test
     void command() {
-        Command startCommand = new StartCommand(userService);
         String actual = startCommand.command();
         assertEquals("/start", actual);
     }
 
     @Test
     void description() {
-        Command startCommand = new StartCommand(userService);
         String actual = startCommand.description();
         assertEquals("запускает бота", actual);
+    }
+
+    @Test
+    void successfulRegistration() {
+        assertTrue(userService.register(chatId));
+    }
+
+    @Test
+    void alreadyRegistered() {
+        String actual =  (String)startCommand.handle(update).getParameters().get("text");
+        assertEquals("Вы уже зарегистрированы!", actual);
     }
 }

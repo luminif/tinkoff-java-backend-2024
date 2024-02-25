@@ -1,23 +1,36 @@
 package edu.java.bot.commands;
 
-import edu.java.bot.services.UserService;
+import edu.java.bot.models.User;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ListCommandTest {
-    UserService userService;
-
+@ExtendWith(MockitoExtension.class)
+public class ListCommandTest extends CommandTest {
     @Test
     void command() {
-        Command listCommand = new ListCommand(userService);
         String actual = listCommand.command();
         assertEquals("/list", actual);
     }
 
     @Test
     void description() {
-        Command listCommand = new ListCommand(userService);
         String actual = listCommand.description();
         assertEquals("показывает список отслеживаемых ресурсов", actual);
+    }
+
+    @Test
+    void emptyLinkList() {
+        String actual = (String)listCommand.handle(update).getParameters().get("text");
+        assertEquals("Нет отслеживаемых ресурсов", actual);
+    }
+
+    @Test
+    void nonEmptyList() {
+        userService.addLink(new User(chatId, List.of()), "github.com/luminif");
+        String actual = (String)listCommand.handle(update).getParameters().get("text");
+        assertEquals("Список отслеживаемых ресурсов: \ngithub.com/luminif\n", actual);
     }
 }
