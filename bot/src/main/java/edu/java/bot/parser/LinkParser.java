@@ -1,7 +1,7 @@
 package edu.java.bot.parser;
 
 public class LinkParser {
-    private String link;
+    private final String link;
 
     public LinkParser(String link) {
         this.link = link;

@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final HashMap<Long, User> users = new HashMap<>();
 
+    public void addUser(User user) {
+        users.put(user.getChatId(), user);
+    }
+
     public Optional<User> findChatById(long chatId) {
         if (users.containsKey(chatId)) {
             return Optional.of(users.get(chatId));
@@ -50,10 +54,6 @@ public class UserService {
         }
 
         return false;
-    }
-
-    private void addUser(User user) {
-        users.put(user.getChatId(), user);
     }
 
     private void updateLinks(User user, List<String> links) {
