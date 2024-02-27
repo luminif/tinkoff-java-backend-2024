@@ -10,21 +10,20 @@ import edu.java.bot.commands.Command;
 import edu.java.bot.message.MessageProcessor;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BotListener implements Bot {
-    private TelegramBot telegramBot;
-    private MessageProcessor messageProcessor;
+    private final TelegramBot telegramBot;
+    private final MessageProcessor messageProcessor;
 
     private SetMyCommands createMenu() {
         List<Command> commands = messageProcessor.commands();
         List<BotCommand> botCommands = new ArrayList<>();
-        commands.forEach(command -> botCommands
-            .add(new BotCommand(command.command(), command.description())));
+        commands.forEach(command -> botCommands.add(command.toApiCommand()));
         return new SetMyCommands(botCommands.toArray(new BotCommand[0]));
     }
 
