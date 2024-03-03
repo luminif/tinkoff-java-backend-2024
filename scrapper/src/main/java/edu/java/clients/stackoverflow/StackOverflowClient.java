@@ -1,12 +1,14 @@
 package edu.java.clients.stackoverflow;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 public class StackOverflowClient implements StackOverflowClientInterface {
     private final WebClient webClient;
-    private String baseUrl = "https://api.stackexchange.com/2.3";
+    @Value("${api.stackoverflow.base-url}")
+    private String baseUrl;
 
     public StackOverflowClient(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl(baseUrl).build();
