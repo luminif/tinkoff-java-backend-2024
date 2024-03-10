@@ -12,6 +12,7 @@ import static org.mockito.Mockito.lenient;
 
 public class CommandTest {
     protected final long chatId = 1337;
+
     @Spy
     protected UserService userService;
 
@@ -23,9 +24,6 @@ public class CommandTest {
 
     @Mock
     protected Chat chat;
-
-    @InjectMocks
-    protected ListCommand listCommand;
 
     @BeforeEach
     protected void setUp() {
