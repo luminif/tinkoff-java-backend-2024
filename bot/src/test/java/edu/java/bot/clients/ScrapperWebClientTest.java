@@ -48,9 +48,9 @@ public class ScrapperWebClientTest {
                 .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .withBody(body)));
 
-        String actualBody = scrapperWebClient.registerChat(7L);
+        String actual = scrapperWebClient.registerChat(7L);
 
-        assertEquals(body, actualBody);
+        assertEquals("Чат зарегистрирован", actual);
     }
 
     @Test
@@ -63,9 +63,9 @@ public class ScrapperWebClientTest {
                 .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .withBody(body)));
 
-        String actualBody = scrapperWebClient.removeChat(7L);
+        String actual = scrapperWebClient.removeChat(7L);
 
-        assertEquals(body, actualBody);
+        assertEquals("Чат успешно удалён", actual);
     }
 
     @Test

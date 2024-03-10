@@ -31,7 +31,7 @@ public class StartCommandTest extends CommandTest {
 
     @Test
     void alreadyRegistered() {
-        String actual = (String)startCommand.handle(update).getParameters().get("text");
+        String actual =  (String)startCommand.handle(update).getParameters().get("text");
         assertEquals("Вы уже зарегистрированы!", actual);
     }
 }
