@@ -45,13 +45,13 @@ public class BotWebClientTest {
                 .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .withBody(body)));
 
-        String actual = botWebClient.sendUpdate(new LinkUpdateRequest(
+        String actualBody = botWebClient.sendUpdate(new LinkUpdateRequest(
             7L,
             new URI("github.com"),
             "",
             List.of(7L, 1337L)
         ));
 
-        assertEquals("Обновление обработано", actual);
+        assertEquals(body, actualBody);
     }
 }

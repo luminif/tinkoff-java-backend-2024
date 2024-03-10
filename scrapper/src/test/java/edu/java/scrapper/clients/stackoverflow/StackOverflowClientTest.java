@@ -53,8 +53,8 @@ public class StackOverflowClientTest {
 
         StackOverflowResponse stackOverflowResponse = stackOverflowClient.fetchQuestion(postId);
 
-        assertEquals("luminif", stackOverflowResponse.name());
+        assertEquals(username, stackOverflowResponse.name());
         assertEquals(OffsetDateTime.parse("2024-02-24T18:20:00Z"), stackOverflowResponse.lastActivityDate());
-        assertEquals(1337, stackOverflowResponse.postId());
+        assertEquals(postId, stackOverflowResponse.postId());
     }
 }

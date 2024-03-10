@@ -50,7 +50,7 @@ public class ScrapperWebClientTest {
 
         String actual = scrapperWebClient.registerChat(7L);
 
-        assertEquals("Чат зарегистрирован", actual);
+        assertEquals(body, actual);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class ScrapperWebClientTest {
 
         String actual = scrapperWebClient.removeChat(7L);
 
-        assertEquals("Чат успешно удалён", actual);
+        assertEquals(body, actual);
     }
 
     @Test
