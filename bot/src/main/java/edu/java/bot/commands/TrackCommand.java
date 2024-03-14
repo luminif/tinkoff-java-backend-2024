@@ -44,9 +44,8 @@ public class TrackCommand implements Command {
             }
 
             String link = splittedText[1];
-            LinkParser linkParser = new LinkParser(link);
 
-            if (!linkParser.checkLink()) {
+            if (!LinkParser.checkLink(link)) {
                 logger.info("Resource %s is not supported".formatted(link));
                 return new SendMessage(chatId, "Данный ресурс не поддерживается!");
             }

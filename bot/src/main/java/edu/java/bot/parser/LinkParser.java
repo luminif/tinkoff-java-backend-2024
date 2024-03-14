@@ -1,13 +1,9 @@
 package edu.java.bot.parser;
 
 public class LinkParser {
-    private final String link;
+    private String link;
 
-    public LinkParser(String link) {
-        this.link = link;
-    }
-
-    public boolean checkLink() {
+    public static boolean checkLink(String link) {
         return link.matches("https?://(github\\.com|stackoverflow\\.com)/.*");
     }
 }
