@@ -5,13 +5,13 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import static org.mockito.Mockito.lenient;
 
 public class CommandTest {
     protected final long chatId = 1337;
+
     @Spy
     protected UserService userService;
 
@@ -23,9 +23,6 @@ public class CommandTest {
 
     @Mock
     protected Chat chat;
-
-    @InjectMocks
-    protected ListCommand listCommand;
 
     @BeforeEach
     protected void setUp() {

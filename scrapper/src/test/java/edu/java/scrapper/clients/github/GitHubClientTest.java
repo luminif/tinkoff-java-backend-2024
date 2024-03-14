@@ -49,7 +49,7 @@ public class GitHubClientTest {
         GitHubResponse gitHubResponse = gitHubClient.fetchRepository(username, repository);
 
         assertEquals(1337, gitHubResponse.id());
-        assertEquals("luminif", gitHubResponse.name());
+        assertEquals(username, gitHubResponse.name());
         assertEquals(OffsetDateTime.parse("2024-02-24T18:00:00Z"), gitHubResponse.updatedAt());
         assertEquals(OffsetDateTime.parse("2024-02-24T18:02:05Z"), gitHubResponse.pushedAt());
     }
