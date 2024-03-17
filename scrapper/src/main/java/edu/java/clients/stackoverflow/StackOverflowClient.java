@@ -25,7 +25,7 @@ public class StackOverflowClient implements StackOverflowClientInterface {
     @Override
     public StackOverflowResponse fetchQuestion(Long postId) {
         return webClient.get()
-            .uri("/questions/{postId}&site=stackoverflow", postId)
+            .uri("/questions/{postId}?site=stackoverflow", postId)
             .retrieve().bodyToMono(StackOverflowResponse.class).block();
     }
 }
