@@ -44,7 +44,7 @@ public class StackOverflowClientTest {
         long postId = 1337;
         String body = "{\"name\":\"luminif\",\"last_activity_date\":\"2024-02-24T18:20:00Z\",\"post_id\":1337}";
 
-        stubFor(get(urlEqualTo("/questions/%d&site=stackoverflow".formatted(postId)))
+        stubFor(get(urlEqualTo("/questions/%d?site=stackoverflow".formatted(postId)))
             .willReturn(aResponse()
                 .withStatus(HttpStatus.OK.value())
                 .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
