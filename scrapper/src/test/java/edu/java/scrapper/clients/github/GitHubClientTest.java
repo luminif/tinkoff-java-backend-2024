@@ -46,11 +46,11 @@ public class GitHubClientTest {
                 .withBody(body))
             );
 
-        GitHubResponse gitHubResponse = gitHubClient.fetchRepository(username, repository);
+        GitHubResponse response = gitHubClient.fetchRepository(username, repository);
 
-        assertEquals(1337, gitHubResponse.id());
-        assertEquals(username, gitHubResponse.name());
-        assertEquals(OffsetDateTime.parse("2024-02-24T18:00:00Z"), gitHubResponse.updatedAt());
-        assertEquals(OffsetDateTime.parse("2024-02-24T18:02:05Z"), gitHubResponse.pushedAt());
+        assertEquals(1337, response.id());
+        assertEquals(username, response.name());
+        assertEquals(OffsetDateTime.parse("2024-02-24T18:00:00Z"), response.updatedAt());
+        assertEquals(OffsetDateTime.parse("2024-02-24T18:02:05Z"), response.pushedAt());
     }
 }

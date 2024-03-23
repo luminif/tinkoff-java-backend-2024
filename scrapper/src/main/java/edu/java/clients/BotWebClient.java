@@ -14,8 +14,8 @@ public class BotWebClient {
     @Value("${api.bot.base-url}")
     private String baseUrl;
 
-    public BotWebClient(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl(baseUrl).build();
+    public BotWebClient() {
+        this.webClient = WebClient.builder().baseUrl(baseUrl).build();
     }
 
     public BotWebClient(String baseUrl) {

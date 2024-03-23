@@ -1,20 +1,21 @@
 package edu.java.bot.services;
 
+import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.api.components.LinkUpdateRequest;
-import edu.java.bot.exceptions.UpdateAlreadyExistsException;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UpdateService {
-    private final List<LinkUpdateRequest> requests = new ArrayList<>();
+    private TelegramBot telegramBot;
 
+    //TODO
     public void handle(LinkUpdateRequest linkUpdateRequest) {
-        if (requests.contains(linkUpdateRequest)) {
-            throw new UpdateAlreadyExistsException("Обновление уже добавлено");
-        }
-
-        requests.add(linkUpdateRequest);
+        linkUpdateRequest.tgChatIds().forEach(id -> {
+            telegramBot.execute(new SendMessage(
+                    id,
+                    "Обновление по ссылке:\n%s\n%s".formatted(linkUpdateRequest.url(), linkUpdateRequest.description()))
+                );
+        });
     }
 }
