@@ -2,23 +2,20 @@ package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.models.User;
-import edu.java.bot.services.UserService;
+import edu.java.bot.api.components.LinkResponse;
+import edu.java.bot.clients.ScrapperWebClient;
 import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ListCommand implements Command {
-    private final UserService userService;
+    private final ScrapperWebClient scrapperWebClient;
     private final Logger logger = LogManager.getLogger();
     private final StringBuilder text = new StringBuilder();
-
-    public ListCommand(UserService userService) {
-        this.userService = userService;
-    }
 
     @Override
     public String command() {
@@ -33,13 +30,7 @@ public class ListCommand implements Command {
     @Override
     public SendMessage handle(Update update) {
         long chatId = update.message().chat().id();
-        Optional<User> user = userService.findChatById(chatId);
-
-        if (user.isEmpty()) {
-            return new SendMessage(chatId, "Для начала зарегистрируйтесь при помощи команды /start");
-        }
-
-        List<String> links = user.get().getLinks();
+        List<LinkResponse> links = scrapperWebClient.getLinks(chatId).links();
 
         if (links.isEmpty()) {
             logger.info("There are no tracked resources");
@@ -48,7 +39,7 @@ public class ListCommand implements Command {
 
         text.setLength(0);
         text.append("Список отслеживаемых ресурсов: ").append("\n");
-        links.forEach(link -> text.append(link).append("\n"));
+        links.forEach(link -> text.append(link.url().toString()).append("\n"));
         logger.info("List of resources has been successfully displayed");
 
         return new SendMessage(chatId, text.toString());
