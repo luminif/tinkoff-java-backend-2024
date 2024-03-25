@@ -41,4 +41,9 @@ public class BotListener implements Bot {
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         });
     }
+
+    @Override
+    public void execute(Long id, String text) {
+        telegramBot.execute(new SendMessage(id, text));
+    }
 }

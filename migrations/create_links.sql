@@ -1,6 +1,6 @@
-CREATE TABLE links (
+create table links (
     link varchar(255) not null,
-    id bigint not null,
+    id bigint generated always as identity,
 
     updated_at timestamp with time zone not null,
 

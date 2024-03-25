@@ -1,12 +1,24 @@
 app:
   scheduler:
     enable: true
-    interval: 10s
-    force-check-delay: 10s
+    interval: 10000
+    force-check-delay: 10000
+    time-for-check: 1
+  database-access-type: jdbc
 
 spring:
   application:
     name: scrapper
+  datasource:
+    url: jdbc:postgresql://localhost:5432/scrapper
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  liquibase:
+    enabled: false
 
 server:
   port: 8080
@@ -25,3 +37,4 @@ api:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+

@@ -2,6 +2,7 @@ package edu.java.bot.clients;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import edu.java.bot.api.components.AddLinkRequest;
 import edu.java.bot.api.components.LinkResponse;
 import edu.java.bot.api.components.ListLinksResponse;
 import edu.java.bot.api.components.RemoveLinkRequest;

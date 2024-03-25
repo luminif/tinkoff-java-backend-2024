@@ -23,9 +23,19 @@ public class StackOverflowClient implements StackOverflowClientInterface {
     }
 
     @Override
-    public StackOverflowResponse fetchQuestion(Long postId) {
-        return webClient.get()
-            .uri("/questions/{postId}&site=stackoverflow", postId)
-            .retrieve().bodyToMono(StackOverflowResponse.class).block();
+    public StackOverflowResponse fetchQuestion(Long questionId) {
+        return webClient
+            .get()
+            .uri("/questions/{questionId}?site=stackoverflow", questionId)
+            .retrieve()
+            .bodyToMono(StackOverflowResponse.class).block();
+    }
+
+    public StackOverflowResponse fetchNewAnswer(Long questionId) {
+        return webClient
+            .get()
+            .uri("/questions/{questionId}/answers?order=desc&sort=creation&site=stackoverflow", questionId)
+            .retrieve()
+            .bodyToMono(StackOverflowResponse.class).block();
     }
 }

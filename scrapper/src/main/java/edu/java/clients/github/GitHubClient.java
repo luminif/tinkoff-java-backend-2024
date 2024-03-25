@@ -1,5 +1,7 @@
 package edu.java.clients.github;
 
+import java.time.OffsetDateTime;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -22,8 +24,22 @@ public class GitHubClient implements GitHubClientInterface {
 
     @Override
     public GitHubResponse fetchRepository(String name, String repository) {
-        return webClient.get()
+        return webClient
+            .get()
             .uri("/repos/{name}/{repository}", name, repository)
-            .retrieve().bodyToMono(GitHubResponse.class).block();
+            .retrieve()
+            .bodyToMono(GitHubResponse.class)
+            .block();
+    }
+
+    @Override
+    public List<GitHubCommitResponse> fetchCommit(String name, String repository, OffsetDateTime date) {
+        return webClient
+            .get()
+            .uri("/repos/{name}/{repository}/commits?since={date}", name, repository, date)
+            .retrieve()
+            .bodyToFlux(GitHubCommitResponse.class)
+            .collectList()
+            .block();
     }
 }
