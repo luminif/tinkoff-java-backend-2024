@@ -3,9 +3,9 @@ package edu.java.schedulers;
 import edu.java.api.components.LinkUpdateRequest;
 import edu.java.clients.BotWebClient;
 import edu.java.clients.handlers.ClientHandler;
+import edu.java.entities.Link;
 import edu.java.services.LinkService;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -26,27 +26,23 @@ public class LinkUpdaterScheduler {
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     void update() {
-        List<String> outdatedLinks = linkService.findOutdatedLinks(minutes);
+        List<Link> outdatedLinks = linkService.findOutdatedLinks(minutes);
 
         outdatedLinks.forEach(link -> {
-            Long linkId = linkService.findLinkIdByUrl(link);
-            String host = link.split("/+")[1];
+            link.setId(linkService.findLinkIdByUrl(link));
+            String host = link.getLink().split("/+")[1];
             botWebClient = new BotWebClient(host);
 
             for (var clientHandler : clientHandlers) {
                 if (clientHandler.supports(host)) {
-                    try {
-                        botWebClient.sendUpdate(new LinkUpdateRequest(
-                            linkId,
-                            new URI(link),
-                            clientHandler.getUpdate(link),
-                            linkService.findIdsByLinkId(linkId)
-                        ));
-                    } catch (URISyntaxException e) {
-                        throw new RuntimeException(e);
-                    }
+                    botWebClient.sendUpdate(new LinkUpdateRequest(
+                        link.getId(),
+                        URI.create(link.getLink()),
+                        clientHandler.getUpdate(link.getLink()),
+                        linkService.findIdsByLinkId(link.getId())
+                    ));
 
-                    linkService.setLastUpdate(linkId);
+                    linkService.setLastUpdate(link.getId());
                 }
             }
         });

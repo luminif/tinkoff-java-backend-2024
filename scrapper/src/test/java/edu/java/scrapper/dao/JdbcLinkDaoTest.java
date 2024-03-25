@@ -1,6 +1,7 @@
 package edu.java.scrapper.dao;
 
 import edu.java.dao.JdbcLinkDao;
+import edu.java.entities.Link;
 import edu.java.scrapper.IntegrationTest;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,10 +32,10 @@ public class JdbcLinkDaoTest extends IntegrationTest {
     @Transactional
     @Rollback
     void addTest() {
-        jdbcLinkDao.add("123", 7L);
-        List<String> links = jdbcLinkDao.findLinksById(7L);
+        jdbcLinkDao.add(new Link("123"), 7L);
+        List<Link> links = jdbcLinkDao.findLinksById(7L);
         assertFalse(links.isEmpty());
-        assertEquals("123", links.get(0));
+        assertEquals("123", links.get(0).getLink());
     }
 
     @Test
@@ -42,7 +43,7 @@ public class JdbcLinkDaoTest extends IntegrationTest {
     @Rollback
     void removeTest() {
         jdbcLinkDao.delete(1L, 7L);
-        List<String> links = jdbcLinkDao.findLinksById(7L);
+        List<Link> links = jdbcLinkDao.findLinksById(7L);
         assertTrue(links.isEmpty());
     }
 }

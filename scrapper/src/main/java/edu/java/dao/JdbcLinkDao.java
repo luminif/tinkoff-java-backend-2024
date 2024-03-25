@@ -1,5 +1,6 @@
 package edu.java.dao;
 
+import edu.java.entities.Link;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,10 @@ public class JdbcLinkDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Transactional
-    public void add(String link, Long chatId) {
-        if (!isUrlExists(link)) {
+    public void add(Link link, Long chatId) {
+        if (!isUrlExists(link.getLink())) {
             jdbcTemplate
-                .update("INSERT INTO links (link, updated_at) VALUES (?, ?)", link, OffsetDateTime.now());
+                .update("INSERT INTO links (link, updated_at) VALUES (?, ?)", link.getLink(), OffsetDateTime.now());
         }
 
         jdbcTemplate
@@ -37,21 +38,21 @@ public class JdbcLinkDao {
     }
 
     @Transactional
-    public List<String> findLinksById(Long chatId) {
+    public List<Link> findLinksById(Long chatId) {
         return jdbcTemplate
             .queryForList(
                 """
                     SELECT link FROM links WHERE id IN
                     (SELECT link_id FROM chat_links WHERE chat_id = ?)
                     """,
-                String.class, chatId
+                Link.class, chatId
             );
     }
 
     @Transactional
-    public Long findLinkIdByUrl(String link) {
+    public Long findLinkIdByUrl(Link link) {
         return jdbcTemplate
-            .queryForObject("SELECT id FROM links where link = ?", Long.class, link);
+            .queryForObject("SELECT id FROM links where link = ?", Long.class, link.getLink());
     }
 
     @Transactional
@@ -61,11 +62,11 @@ public class JdbcLinkDao {
     }
 
     @Transactional
-    public List<String> findOutdatedLinks(Long minutes) {
+    public List<Link> findOutdatedLinks(Long minutes) {
         OffsetDateTime delta = OffsetDateTime.now().minusMinutes(minutes);
 
         return jdbcTemplate
-            .queryForList("SELECT link FROM links WHERE updated_at <= ?", String.class, delta);
+            .queryForList("SELECT link FROM links WHERE updated_at <= ?", Link.class, delta);
     }
 
     @Transactional

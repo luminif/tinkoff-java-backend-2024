@@ -4,6 +4,8 @@ import edu.java.api.components.AddLinkRequest;
 import edu.java.api.components.LinkResponse;
 import edu.java.api.components.ListLinksResponse;
 import edu.java.api.components.RemoveLinkRequest;
+import edu.java.entities.Chat;
+import edu.java.entities.Link;
 import edu.java.services.ChatService;
 import edu.java.services.LinkService;
 import java.net.URI;
@@ -27,7 +29,7 @@ public class ScrapperController {
 
     @PostMapping("/tg-chat/{id}")
     public String registerChat(@PathVariable("id") Long id) {
-        chatService.register(id);
+        chatService.register(new Chat(id));
         return "Чат зарегистрирован";
     }
 
@@ -39,13 +41,13 @@ public class ScrapperController {
 
     @GetMapping("/links")
     public ListLinksResponse getLinks(@RequestHeader("Tg-Chat-Id") Long id) {
-        List<String> responseList = linkService.findLinksById(id);
+        List<Link> responseList = linkService.findLinksById(id);
 
         List<LinkResponse> linkResponses = new ArrayList<>();
 
         responseList.forEach(url -> {
             try {
-                linkResponses.add(new LinkResponse(id, new URI(url)));
+                linkResponses.add(new LinkResponse(id, new URI(url.getLink())));
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
@@ -58,15 +60,15 @@ public class ScrapperController {
     public LinkResponse addLink(@RequestHeader("Tg-Chat-Id") Long id, @RequestBody AddLinkRequest request)
         throws URISyntaxException {
         String link = request.link().toString();
-        String addLink = linkService.add(id, link);
-        return new LinkResponse(id, new URI(addLink));
+        Link addLink = linkService.add(id, new Link(link));
+        return new LinkResponse(id, new URI(addLink.getLink()));
     }
 
     @DeleteMapping("/links")
     public LinkResponse removeLink(@RequestHeader("Tg-Chat-Id") Long id, @RequestBody RemoveLinkRequest request)
     throws URISyntaxException {
         String link = request.link().toString();
-        String removeLink = linkService.remove(id, link);
-        return new LinkResponse(id, new URI(removeLink));
+        Link removeLink = linkService.remove(id, new Link(link));
+        return new LinkResponse(id, new URI(removeLink.getLink()));
     }
 }

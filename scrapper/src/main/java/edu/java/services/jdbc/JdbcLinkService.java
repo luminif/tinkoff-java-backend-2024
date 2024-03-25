@@ -1,59 +1,58 @@
 package edu.java.services.jdbc;
 
 import edu.java.dao.JdbcLinkDao;
+import edu.java.entities.Link;
 import edu.java.exceptions.LinkAlreadyAddedException;
 import edu.java.exceptions.LinkNotFoundException;
 import edu.java.services.LinkService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
     private final JdbcLinkDao jdbcLinkDao;
     private final JdbcChatService jdbcChatService;
 
     @Override
-    public String add(Long chatId, String url) {
+    public Link add(Long chatId, Link link) {
         jdbcChatService.isChatExists(chatId);
-        List<String> links = jdbcLinkDao.findLinksById(chatId);
+        List<Link> links = jdbcLinkDao.findLinksById(chatId);
 
-        for (String link : links) {
-            if (link.equals(url)) {
+        for (var url : links) {
+            if (url.equals(link)) {
                 throw new LinkAlreadyAddedException("Ссылка уже добавлена в список отслеживаемых");
             }
         }
 
-        jdbcLinkDao.add(url, chatId);
-        return url;
+        jdbcLinkDao.add(link, chatId);
+        return link;
     }
 
     @Override
-    public String remove(Long chatId, String url) {
+    public Link remove(Long chatId, Link link) {
         jdbcChatService.isChatExists(chatId);
 
-        if (!jdbcLinkDao.isUrlExists(url)) {
+        if (!jdbcLinkDao.isUrlExists(link.getLink())) {
             throw new LinkNotFoundException("Такой ссылки нет");
         }
 
-        jdbcLinkDao.delete(jdbcLinkDao.findLinkIdByUrl(url), chatId);
-        return url;
+        jdbcLinkDao.delete(jdbcLinkDao.findLinkIdByUrl(link), chatId);
+        return link;
     }
 
     @Override
-    public List<String> findLinksById(Long chatId) {
+    public List<Link> findLinksById(Long chatId) {
         jdbcChatService.isChatExists(chatId);
         return jdbcLinkDao.findLinksById(chatId);
     }
 
     @Override
-    public Long findLinkIdByUrl(String link) {
+    public Long findLinkIdByUrl(Link link) {
         return jdbcLinkDao.findLinkIdByUrl(link);
     }
 
     @Override
-    public List<String> findOutdatedLinks(Long minutes) {
+    public List<Link> findOutdatedLinks(Long minutes) {
         return jdbcLinkDao.findOutdatedLinks(minutes);
     }
 
