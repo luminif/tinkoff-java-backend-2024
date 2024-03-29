@@ -7,7 +7,9 @@ import edu.java.bot.api.components.ListLinksResponse;
 import edu.java.bot.api.components.RemoveLinkRequest;
 import edu.java.bot.exceptions.ApiErrorException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -79,9 +81,9 @@ public class ScrapperWebClient {
             .post()
             .uri(PATH_TO_LINKS)
             .header(HEADER, String.valueOf(id))
+            .body(BodyInserters.fromValue(request))
             .retrieve()
-            .onStatus(
-                HttpStatusCode::is4xxClientError,
+            .onStatus(HttpStatusCode::is4xxClientError,
                 response -> response.bodyToMono(ApiErrorResponse.class)
                     .flatMap(errorResponse ->
                         Mono.error(new ApiErrorException(errorResponse))))
@@ -91,12 +93,12 @@ public class ScrapperWebClient {
 
     public LinkResponse removeLink(Long id, RemoveLinkRequest request) {
         return webClient
-            .delete()
+            .method(HttpMethod.DELETE)
             .uri(PATH_TO_LINKS)
             .header(HEADER, String.valueOf(id))
+            .body(BodyInserters.fromValue(request))
             .retrieve()
-            .onStatus(
-                HttpStatusCode::is4xxClientError,
+            .onStatus(HttpStatusCode::is4xxClientError,
                 response -> response.bodyToMono(ApiErrorResponse.class)
                     .flatMap(errorResponse ->
                         Mono.error(new ApiErrorException(errorResponse))))

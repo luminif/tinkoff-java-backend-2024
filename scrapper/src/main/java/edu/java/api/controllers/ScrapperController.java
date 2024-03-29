@@ -42,17 +42,8 @@ public class ScrapperController {
     @GetMapping("/links")
     public ListLinksResponse getLinks(@RequestHeader("Tg-Chat-Id") Long id) {
         List<Link> responseList = linkService.findLinksById(id);
-
         List<LinkResponse> linkResponses = new ArrayList<>();
-
-        responseList.forEach(url -> {
-            try {
-                linkResponses.add(new LinkResponse(id, new URI(url.getLink())));
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
+        responseList.forEach(url -> linkResponses.add(new LinkResponse(id, URI.create(url.getLink()))));
         return new ListLinksResponse(linkResponses, responseList.size());
     }
 

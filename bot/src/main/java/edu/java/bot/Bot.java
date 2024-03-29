@@ -8,5 +8,5 @@ public interface Bot {
 
     void start();
 
-    void execute(Long id, String text);
+    void execute(SendMessage message);
 }

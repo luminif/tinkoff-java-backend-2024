@@ -22,7 +22,7 @@ public class LinkUpdaterScheduler {
     private final Logger logger = LogManager.getLogger();
     private final LinkService linkService;
     private final List<ClientHandler> clientHandlers;
-    private BotWebClient botWebClient;
+    private final BotWebClient botWebClient;
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     void update() {
@@ -31,14 +31,13 @@ public class LinkUpdaterScheduler {
         outdatedLinks.forEach(link -> {
             link.setId(linkService.findLinkIdByUrl(link));
             String host = link.getLink().split("/+")[1];
-            botWebClient = new BotWebClient(host);
 
             for (var clientHandler : clientHandlers) {
                 if (clientHandler.supports(host)) {
                     botWebClient.sendUpdate(new LinkUpdateRequest(
                         link.getId(),
                         URI.create(link.getLink()),
-                        clientHandler.getUpdate(link.getLink()),
+                        clientHandler.getUpdate(link),
                         linkService.findIdsByLinkId(link.getId())
                     ));
 

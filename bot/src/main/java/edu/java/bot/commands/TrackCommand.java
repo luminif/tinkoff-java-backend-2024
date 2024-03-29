@@ -7,7 +7,6 @@ import edu.java.bot.api.components.LinkResponse;
 import edu.java.bot.clients.ScrapperWebClient;
 import edu.java.bot.parser.LinkParser;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -55,12 +54,8 @@ public class TrackCommand implements Command {
             logger.info("Resource %s is already being tracked".formatted(link));
             responseMessage = "Ресурс %s ранее был добавлен в список отслеживаемых".formatted(link);
         } else {
-            try {
-                LinkResponse response = scrapperWebClient.addLink(chatId, new AddLinkRequest(new URI(link)));
-                logger.info(response);
-            } catch (URISyntaxException ignored) {
-
-            }
+            LinkResponse response = scrapperWebClient.addLink(chatId, new AddLinkRequest(URI.create(link)));
+            logger.info(response);
 
             responseMessage = "Ресурс %s добавлен в список отслеживаемых".formatted(link);
             logger.info("Resource %s is being successfully tracked".formatted(link));

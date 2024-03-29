@@ -6,14 +6,20 @@ import java.util.List;
 
 public record StackOverflowResponse(List<ItemResponse> items) {
     public record ItemResponse(
-        String name,
         @JsonProperty("last_activity_date")
         OffsetDateTime lastActivityDate,
         @JsonProperty("creation_date")
         OffsetDateTime creationDate,
         @JsonProperty("question_id")
-        Long questionId
+        Long questionId,
+        @JsonProperty("owner")
+        Owner owner
     ) {
+        public record Owner(
+            @JsonProperty("display_name")
+            String name
+        ) {
 
+        }
     }
 }

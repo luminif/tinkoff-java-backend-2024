@@ -6,7 +6,6 @@ import edu.java.bot.api.components.LinkResponse;
 import edu.java.bot.api.components.RemoveLinkRequest;
 import edu.java.bot.clients.ScrapperWebClient;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -48,12 +47,8 @@ public class UntrackCommand implements Command {
             return new SendMessage(chatId, "Ресурс %s ранее не отслеживался".formatted(link));
         }
 
-        try {
-            LinkResponse response = scrapperWebClient.removeLink(chatId, new RemoveLinkRequest(new URI(link)));
-            logger.info(response);
-        } catch (URISyntaxException ignored) {
-
-        }
+        LinkResponse response = scrapperWebClient.removeLink(chatId, new RemoveLinkRequest(URI.create(link)));
+        logger.info(response);
 
         logger.info("Resource %s was successfully removed from the tracked".formatted(link));
         return new SendMessage(chatId, "Отслеживвание ресура %s прекращено".formatted(link));
