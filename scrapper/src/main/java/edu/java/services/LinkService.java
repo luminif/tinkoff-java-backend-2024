@@ -1,17 +1,18 @@
 package edu.java.services;
 
+import edu.java.entities.Link;
 import java.util.List;
 
 public interface LinkService {
-    String add(Long chatId, String url);
+    Link add(Long chatId, Link link);
 
-    String remove(Long chatId, String url);
+    Link remove(Long chatId, Link link);
 
-    List<String> findLinksById(Long chatId);
+    List<Link> findLinksById(Long chatId);
 
-    Long findLinkIdByUrl(String link);
+    Long findLinkIdByUrl(Link link);
 
-    List<String> findOutdatedLinks(Long interval);
+    List<Link> findOutdatedLinks(Long minutes);
 
     List<Long> findIdsByLinkId(Long linkId);
 

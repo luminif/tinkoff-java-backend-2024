@@ -12,6 +12,8 @@ public record GitHubCommitResponse(
         Author author
     ) {
         public record Author(
+            @JsonProperty("name")
+            String name,
             @JsonProperty("date")
             OffsetDateTime date
         ) {

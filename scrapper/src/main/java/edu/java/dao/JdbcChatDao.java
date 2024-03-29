@@ -26,4 +26,10 @@ public class JdbcChatDao {
         return jdbcTemplate
             .queryForList("SELECT id FROM chats WHERE id = ?", Long.class, chatId);
     }
+
+    @Transactional
+    public List<Long> findAllIdsByLinkId(Long linkId) {
+        return jdbcTemplate
+            .queryForList("SELECT chat_id FROM chat_links WHERE link_id = ?", Long.class, linkId);
+    }
 }

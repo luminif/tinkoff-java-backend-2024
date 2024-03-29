@@ -4,6 +4,8 @@ import edu.java.api.components.AddLinkRequest;
 import edu.java.api.components.LinkResponse;
 import edu.java.api.components.ListLinksResponse;
 import edu.java.api.components.RemoveLinkRequest;
+import edu.java.entities.Chat;
+import edu.java.entities.Link;
 import edu.java.services.ChatService;
 import edu.java.services.LinkService;
 import java.net.URI;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +29,7 @@ public class ScrapperController {
 
     @PostMapping("/tg-chat/{id}")
     public String registerChat(@PathVariable("id") Long id) {
-        chatService.register(id);
+        chatService.register(new Chat(id));
         return "Чат зарегистрирован";
     }
 
@@ -38,34 +41,25 @@ public class ScrapperController {
 
     @GetMapping("/links")
     public ListLinksResponse getLinks(@RequestHeader("Tg-Chat-Id") Long id) {
-        List<String> responseList = linkService.findLinksById(id);
-
+        List<Link> responseList = linkService.findLinksById(id);
         List<LinkResponse> linkResponses = new ArrayList<>();
-
-        responseList.forEach(url -> {
-            try {
-                linkResponses.add(new LinkResponse(id, new URI(url)));
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
+        responseList.forEach(url -> linkResponses.add(new LinkResponse(id, URI.create(url.getLink()))));
         return new ListLinksResponse(linkResponses, responseList.size());
     }
 
     @PostMapping("/links")
-    public LinkResponse addLink(@RequestHeader("Tg-Chat-Id") Long id, AddLinkRequest request)
+    public LinkResponse addLink(@RequestHeader("Tg-Chat-Id") Long id, @RequestBody AddLinkRequest request)
         throws URISyntaxException {
         String link = request.link().toString();
-        String addLink = linkService.add(id, link);
-        return new LinkResponse(id, new URI(addLink));
+        Link addLink = linkService.add(id, new Link(link));
+        return new LinkResponse(id, new URI(addLink.getLink()));
     }
 
     @DeleteMapping("/links")
-    public LinkResponse removeLink(@RequestHeader("Tg-Chat-Id") Long id, RemoveLinkRequest request)
+    public LinkResponse removeLink(@RequestHeader("Tg-Chat-Id") Long id, @RequestBody RemoveLinkRequest request)
     throws URISyntaxException {
         String link = request.link().toString();
-        String removeLink = linkService.remove(id, link);
-        return new LinkResponse(id, new URI(removeLink));
+        Link removeLink = linkService.remove(id, new Link(link));
+        return new LinkResponse(id, new URI(removeLink.getLink()));
     }
 }

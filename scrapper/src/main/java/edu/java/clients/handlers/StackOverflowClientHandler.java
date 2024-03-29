@@ -3,6 +3,7 @@ package edu.java.clients.handlers;
 import edu.java.clients.stackoverflow.StackOverflowClient;
 import edu.java.clients.stackoverflow.StackOverflowResponse;
 import edu.java.dao.JdbcLinkDao;
+import edu.java.entities.Link;
 import java.time.OffsetDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,30 +21,28 @@ public class StackOverflowClientHandler implements ClientHandler {
     }
 
     @Override
-    public String getUpdate(String link) {
-        String[] segments = link.split("/+");
+    public String getUpdate(Link link) {
+        String[] segments = link.getLink().split("/+");
         Long questionId = Long.valueOf(segments[ID_INDEX]);
-        OffsetDateTime lastUpdate = jdbcLinkDao.getLastUpdate(link);
+        OffsetDateTime lastUpdate = jdbcLinkDao.getLastUpdate(link.getLink());
         var text = new StringBuilder();
 
         StackOverflowResponse response = stackOverflowClient.fetchQuestion(questionId);
 
         for (var item : response.items()) {
             if (item.lastActivityDate().isAfter(lastUpdate)) {
-                text.append("обновление в вопросе %s".formatted(link)).append("\n");
+                text.append("обновление в вопросе. ");
             }
         }
 
         response = stackOverflowClient.fetchNewAnswer(questionId);
-        int answersCount = 0;
 
         for (var item : response.items()) {
             if (item.creationDate().isAfter(lastUpdate)) {
-                answersCount++;
+                text.append("(новый ответ в вопросе от %s)".formatted(item.owner().name()));
             }
         }
 
-        text.append("новые ответы в вопросе %s: %d".formatted(link, answersCount)).append("\n");
         return text.toString();
     }
 }

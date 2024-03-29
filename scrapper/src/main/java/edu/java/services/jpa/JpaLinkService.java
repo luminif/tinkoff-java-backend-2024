@@ -1,22 +1,22 @@
-package edu.java.services.jdbc;
+package edu.java.services.jpa;
 
-import edu.java.dao.JdbcLinkDao;
 import edu.java.entities.Link;
 import edu.java.exceptions.LinkAlreadyAddedException;
 import edu.java.exceptions.LinkNotFoundException;
+import edu.java.repositories.JpaLinkRepository;
 import edu.java.services.LinkService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class JdbcLinkService implements LinkService {
-    private final JdbcLinkDao jdbcLinkDao;
-    private final JdbcChatService jdbcChatService;
+public class JpaLinkService implements LinkService {
+    private final JpaChatService jpaChatService;
+    private final JpaLinkRepository jpaLinkRepository;
 
     @Override
     public Link add(Long chatId, Link link) {
-        jdbcChatService.isChatExists(chatId);
-        List<Link> links = jdbcLinkDao.findLinksById(chatId);
+        jpaChatService.isChatExists(chatId);
+        List<Link> links = jpaLinkRepository.findLinksById(chatId);
 
         for (var url : links) {
             if (url.equals(link)) {
@@ -24,45 +24,47 @@ public class JdbcLinkService implements LinkService {
             }
         }
 
-        jdbcLinkDao.add(link, chatId);
-        return link;
+        Link addLink = jpaLinkRepository.save(link);
+        jpaLinkRepository.add(addLink.getId(), chatId);
+        return addLink;
     }
 
     @Override
     public Link remove(Long chatId, Link link) {
-        jdbcChatService.isChatExists(chatId);
+        jpaChatService.isChatExists(chatId);
 
-        if (!jdbcLinkDao.isUrlExists(link.getLink())) {
+        if (!jpaLinkRepository.isUrlExists(link.getLink())) {
             throw new LinkNotFoundException("Такой ссылки нет");
         }
 
-        jdbcLinkDao.delete(jdbcLinkDao.findLinkIdByUrl(link), chatId);
+        jpaLinkRepository.delete(link.getId(), chatId);
+        jpaLinkRepository.delete(link);
+
         return link;
     }
 
     @Override
     public List<Link> findLinksById(Long chatId) {
-        jdbcChatService.isChatExists(chatId);
-        return jdbcLinkDao.findLinksById(chatId);
+        return jpaLinkRepository.findLinksById(chatId);
     }
 
     @Override
     public Long findLinkIdByUrl(Link link) {
-        return jdbcLinkDao.findLinkIdByUrl(link);
+        return jpaLinkRepository.findLinkIdByUrl(link.getLink());
     }
 
     @Override
     public List<Link> findOutdatedLinks(Long minutes) {
-        return jdbcLinkDao.findOutdatedLinks(minutes);
+        return jpaLinkRepository.findOutdatedLinks(minutes);
     }
 
     @Override
     public List<Long> findIdsByLinkId(Long linkId) {
-        return jdbcLinkDao.findIdsByLinkId(linkId);
+        return jpaLinkRepository.findIdsByLinkId(linkId);
     }
 
     @Override
     public void setLastUpdate(Long linkId) {
-        jdbcLinkDao.setLastUpdate(linkId);
+        jpaLinkRepository.setLastUpdate(linkId);
     }
 }

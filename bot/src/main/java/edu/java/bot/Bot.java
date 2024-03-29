@@ -7,4 +7,6 @@ public interface Bot {
     SendMessage process(Update update);
 
     void start();
+
+    void execute(SendMessage message);
 }

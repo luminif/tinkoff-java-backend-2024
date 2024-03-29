@@ -1,21 +1,25 @@
 package edu.java.bot.services;
 
-import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.BotListener;
 import edu.java.bot.api.components.LinkUpdateRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UpdateService {
-    private TelegramBot telegramBot;
+    private final BotListener bot;
 
-    //TODO
     public void handle(LinkUpdateRequest linkUpdateRequest) {
-        linkUpdateRequest.tgChatIds().forEach(id -> {
-            telegramBot.execute(new SendMessage(
+        if (!linkUpdateRequest.description().isEmpty()) {
+            linkUpdateRequest.tgChatIds().forEach(id -> {
+                bot.execute(new SendMessage(
                     id,
-                    "Обновление по ссылке:\n%s\n%s".formatted(linkUpdateRequest.url(), linkUpdateRequest.description()))
+                    "Обновление по ссылке:\n%s - %s"
+                        .formatted(linkUpdateRequest.url(), linkUpdateRequest.description()))
                 );
-        });
+            });
+        }
     }
 }
