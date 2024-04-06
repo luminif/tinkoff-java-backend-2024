@@ -33,6 +33,6 @@ public class CommandTest {
         lenient().doReturn(message).when(update).message();
         lenient().doReturn(chat).when(message).chat();
         lenient().doReturn(chatId).when(chat).id();
-        scrapperWebClient.removeChatRetry(chatId);
+        scrapperWebClient.registerChatRetry(chatId);
     }
 }
