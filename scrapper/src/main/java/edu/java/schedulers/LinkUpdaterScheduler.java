@@ -34,7 +34,7 @@ public class LinkUpdaterScheduler {
 
             for (var clientHandler : clientHandlers) {
                 if (clientHandler.supports(host)) {
-                    botWebClient.sendUpdate(new LinkUpdateRequest(
+                    botWebClient.sendUpdateRetry(new LinkUpdateRequest(
                         link.getId(),
                         URI.create(link.getLink()),
                         clientHandler.getUpdate(link),

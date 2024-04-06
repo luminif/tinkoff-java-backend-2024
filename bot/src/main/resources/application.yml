@@ -16,6 +16,13 @@ logging:
 api:
   scrapper:
     base-url: http://localhost:8080
+    retry-policy: exponential
+    attempts: 5
+    statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE, BAD_GATEWAY
+
+bucket:
+  tokens: 50
+  refill-tokens: 10
 
 springdoc:
   swagger-ui:

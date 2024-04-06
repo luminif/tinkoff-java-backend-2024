@@ -28,7 +28,7 @@ public class StartCommand implements Command {
     @Override
     public SendMessage handle(Update update) {
         long chatId = update.message().chat().id();
-        scrapperWebClient.registerChat(chatId);
+        scrapperWebClient.registerChatRetry(chatId);
         logger.info("User with chatID %d has been successfully registered".formatted(chatId));
         return new SendMessage(chatId, "Вы зарегистрировались. Чтобы узнать доступные команды, используйте /help");
     }
