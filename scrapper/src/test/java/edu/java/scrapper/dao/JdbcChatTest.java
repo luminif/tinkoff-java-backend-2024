@@ -31,18 +31,18 @@ public class JdbcChatTest extends IntegrationTest {
     @Transactional
     @Rollback
     void addTest() {
-        jdbcChatDao.add(7L);
-        List<Long> ids = jdbcChatDao.findById(7L);
+        jdbcChatDao.add(8L);
+        List<Long> ids = jdbcChatDao.findById(8L);
         assertFalse(ids.isEmpty());
-        assertEquals(7L, ids.get(0));
+        assertEquals(8L, ids.get(0));
     }
 
     @Test
     @Transactional
     @Rollback
     void removeTest() {
-        jdbcChatDao.delete(7L);
-        List<Long> ids = jdbcChatDao.findById(7L);
+        jdbcChatDao.delete(8L);
+        List<Long> ids = jdbcChatDao.findById(8L);
         assertTrue(ids.isEmpty());
     }
 }
