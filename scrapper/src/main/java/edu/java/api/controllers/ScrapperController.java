@@ -35,7 +35,7 @@ public class ScrapperController {
 
     @DeleteMapping("/tg-chat/{id}")
     public String removeChat(@PathVariable("id") Long id) {
-        chatService.unregister(id);
+        chatService.unregister(new Chat(id));
         return "Чат успешно удалён";
     }
 

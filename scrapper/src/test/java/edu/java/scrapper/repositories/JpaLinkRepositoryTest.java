@@ -32,7 +32,7 @@ public class JpaLinkRepositoryTest extends IntegrationTest {
     @BeforeEach
     void setUp() {
         link = new Link("123");
-        chat = new Chat(8L);
+        chat = new Chat(7L);
         jpaChatRepository.save(chat);
         link.setUpdatedAt(OffsetDateTime.now());
     }

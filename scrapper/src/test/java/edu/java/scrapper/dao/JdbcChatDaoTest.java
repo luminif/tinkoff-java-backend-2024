@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class JdbcChatTest extends IntegrationTest {
+public class JdbcChatDaoTest extends IntegrationTest {
     private JdbcChatDao jdbcChatDao;
 
     @BeforeEach
@@ -41,8 +41,9 @@ public class JdbcChatTest extends IntegrationTest {
     @Transactional
     @Rollback
     void removeTest() {
-        jdbcChatDao.delete(8L);
-        List<Long> ids = jdbcChatDao.findById(8L);
+        jdbcChatDao.add(10L);
+        jdbcChatDao.delete(10L);
+        List<Long> ids = jdbcChatDao.findById(10L);
         assertTrue(ids.isEmpty());
     }
 }

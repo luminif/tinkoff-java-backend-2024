@@ -6,7 +6,7 @@ import java.util.List;
 public interface ChatService {
     void register(Chat chat);
 
-    void unregister(Long chatId);
+    void unregister(Chat chat);
 
     void isChatExists(Long chatId);
 
