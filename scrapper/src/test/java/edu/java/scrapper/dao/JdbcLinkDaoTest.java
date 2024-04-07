@@ -42,7 +42,7 @@ public class JdbcLinkDaoTest extends IntegrationTest {
     @Transactional
     @Rollback
     void removeTest() {
-        //Временно
+        //Временно 
         /*jdbcLinkDao.add(new Link("123"), 10L);
         jdbcLinkDao.delete(1L, 10L);
         List<Link> links = jdbcLinkDao.findLinksById(10L);
