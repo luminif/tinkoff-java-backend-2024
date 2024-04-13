@@ -21,41 +21,44 @@ public class RetryConfiguration {
             case EXPONENTIAL -> exponential(settings);
         };
 
-        return Retry.of("scrapper", config);
+        return Retry.of("bot", config);
     }
 
     private static RetryConfig constant(RetrySettings settings) {
-        return RetryConfig.custom()
+        return RetryConfig
+            .custom()
             .maxAttempts(settings.attempts())
             .intervalFunction(IntervalFunction.of(
                 Duration.ofSeconds(INTERVAL)
             ))
-            .retryOnException(exception -> exception instanceof WebClientResponseException
-                && settings.statuses().contains(((WebClientResponseException) exception).getStatusCode()))
+            .retryOnResult(response -> response instanceof WebClientResponseException &&
+                settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
             .build();
     }
 
     private static RetryConfig linear(RetrySettings settings) {
-        return RetryConfig.custom()
+        return RetryConfig
+            .custom()
             .maxAttempts(settings.attempts())
             .intervalFunction(IntervalFunction.of(
                 Duration.ofSeconds(INTERVAL),
                 backoff -> INTERVAL * backoff
             ))
-            .retryOnException(exception -> exception instanceof WebClientResponseException
-                && settings.statuses().contains(((WebClientResponseException) exception).getStatusCode()))
+            .retryOnResult(response -> response instanceof WebClientResponseException &&
+                settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
             .build();
     }
 
     private static RetryConfig exponential(RetrySettings settings) {
-        return RetryConfig.custom()
+        return RetryConfig
+            .custom()
             .maxAttempts(settings.attempts())
             .intervalFunction(IntervalFunction.ofExponentialBackoff(
                 IntervalFunction.DEFAULT_INITIAL_INTERVAL,
                 IntervalFunction.DEFAULT_MULTIPLIER
             ))
-            .retryOnException(exception -> exception instanceof WebClientResponseException
-                && settings.statuses().contains(((WebClientResponseException) exception).getStatusCode()))
+            .retryOnResult(response -> response instanceof WebClientResponseException &&
+                settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
             .build();
     }
 }
