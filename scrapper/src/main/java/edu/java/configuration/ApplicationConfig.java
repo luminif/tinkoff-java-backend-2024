@@ -11,13 +11,23 @@ public record ApplicationConfig(
     @NotNull
     Scheduler scheduler,
     @NotNull
-    String databaseAccessType
+    String databaseAccessType,
+    @NotNull Kafka kafka,
+    boolean useQueue
 ) {
     public record Scheduler(
         boolean enable,
         @NotNull Duration interval,
         @NotNull Duration forceCheckDelay,
         @NotNull Long timeForCheck
+    ) {
+    }
+
+    public record Kafka(
+        String bootstrapServers,
+        String topicName,
+        long lingerMs,
+        String trustedPackages
     ) {
     }
 }

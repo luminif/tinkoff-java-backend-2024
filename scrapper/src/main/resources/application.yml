@@ -5,6 +5,12 @@ app:
     force-check-delay: 10000
     time-for-check: 1
   database-access-type: jdbc
+  kafka:
+    bootstrap-servers: ${DOCKER_HOST_IP:127.0.0.1}:9092
+    topic-name: bot-updates
+    linger-ms: 10
+    trusted-packages: "*"
+  use-queue: true
 
 spring:
   application:
@@ -29,17 +35,17 @@ logging:
 api:
   github:
     base-url: https://api.github.com
-    retry-policy: linear
+    retry-policy: exponential
     attempts: 5
     statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE, BAD_GATEWAY
   stackoverflow:
     base-url: https://api.stackexchange.com/2.3
-    retry-policy: linear
+    retry-policy: exponential
     attempts: 5
     statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE, BAD_GATEWAY
   bot:
     base-url: http://localhost:8090
-    retry-policy: linear
+    retry-policy: exponential
     attempts: 5
     statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE, BAD_GATEWAY
 

@@ -1,5 +1,12 @@
 app:
   telegram-token: ${TELEGRAM_API_KEY}
+  kafka:
+    bootstrap-servers: ${DOCKER_HOST_IP:127.0.0.1}:9092
+    topic-name: bot-updates
+    bad-topic-name: bot-updates_dlq
+    group-id: bot
+    type-mappings: edu.java.api.components.LinkUpdateRequest:edu.java.bot.api.components.LinkUpdateRequest
+    trusted-packages: "*"
 
 spring:
   application:
