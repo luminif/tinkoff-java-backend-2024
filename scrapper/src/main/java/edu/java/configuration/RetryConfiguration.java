@@ -31,8 +31,8 @@ public class RetryConfiguration {
             .intervalFunction(IntervalFunction.of(
                 Duration.ofSeconds(INTERVAL)
             ))
-            .retryOnResult(response -> response instanceof WebClientResponseException &&
-                settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
+            .retryOnResult(response -> response instanceof WebClientResponseException
+                && settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
             .build();
     }
 
@@ -44,8 +44,8 @@ public class RetryConfiguration {
                 Duration.ofSeconds(INTERVAL),
                 backoff -> INTERVAL * backoff
             ))
-            .retryOnResult(response -> response instanceof WebClientResponseException &&
-                settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
+            .retryOnResult(response -> response instanceof WebClientResponseException
+                && settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
             .build();
     }
 
@@ -57,8 +57,8 @@ public class RetryConfiguration {
                 IntervalFunction.DEFAULT_INITIAL_INTERVAL,
                 IntervalFunction.DEFAULT_MULTIPLIER
             ))
-            .retryOnResult(response -> response instanceof WebClientResponseException &&
-                settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
+            .retryOnResult(response -> response instanceof WebClientResponseException
+                && settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
             .build();
     }
 }

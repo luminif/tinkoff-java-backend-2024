@@ -1,13 +1,12 @@
 package edu.java.schedulers;
 
 import edu.java.api.components.LinkUpdateRequest;
-import edu.java.clients.BotWebClient;
 import edu.java.clients.handlers.ClientHandler;
 import edu.java.entities.Link;
 import edu.java.services.LinkService;
+import edu.java.services.LinkUpdateSender;
 import java.net.URI;
 import java.util.List;
-import edu.java.services.LinkUpdateSender;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

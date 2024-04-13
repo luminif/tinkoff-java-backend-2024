@@ -1,6 +1,8 @@
 package edu.java.configuration;
 
 import edu.java.api.components.LinkUpdateRequest;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -10,8 +12,6 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @Configuration
@@ -36,7 +36,8 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate(ProducerFactory<String, LinkUpdateRequest> producerFactory) {
+    public KafkaTemplate<String, LinkUpdateRequest>
+    kafkaTemplate(ProducerFactory<String, LinkUpdateRequest> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 }

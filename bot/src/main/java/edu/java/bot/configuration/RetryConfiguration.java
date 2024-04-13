@@ -5,7 +5,6 @@ import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import java.time.Duration;
-import org.springframework.web.reactive.function.client.WebClientRequestException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 public class RetryConfiguration {
@@ -32,8 +31,8 @@ public class RetryConfiguration {
             .intervalFunction(IntervalFunction.of(
                 Duration.ofSeconds(INTERVAL)
             ))
-            .retryOnResult(response -> response instanceof WebClientResponseException &&
-                settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
+            .retryOnResult(response -> response instanceof WebClientResponseException
+                && settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
             .build();
     }
 
@@ -45,8 +44,8 @@ public class RetryConfiguration {
                 Duration.ofSeconds(INTERVAL),
                 backoff -> INTERVAL * backoff
             ))
-            .retryOnResult(response -> response instanceof WebClientResponseException &&
-                settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
+            .retryOnResult(response -> response instanceof WebClientResponseException
+                && settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
             .build();
     }
 
@@ -58,8 +57,8 @@ public class RetryConfiguration {
                 IntervalFunction.DEFAULT_INITIAL_INTERVAL,
                 IntervalFunction.DEFAULT_MULTIPLIER
             ))
-            .retryOnResult(response -> response instanceof WebClientResponseException &&
-                settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
+            .retryOnResult(response -> response instanceof WebClientResponseException
+                && settings.statuses().contains(((WebClientResponseException) response).getStatusCode()))
             .build();
     }
 }
