@@ -7,6 +7,7 @@ import edu.java.entities.Link;
 import edu.java.services.LinkService;
 import java.net.URI;
 import java.util.List;
+import edu.java.services.LinkUpdateSender;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +23,7 @@ public class LinkUpdaterScheduler {
     private final Logger logger = LogManager.getLogger();
     private final LinkService linkService;
     private final List<ClientHandler> clientHandlers;
-    private final BotWebClient botWebClient;
+    private final LinkUpdateSender linkUpdateSender;
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     void update() {
@@ -34,7 +35,7 @@ public class LinkUpdaterScheduler {
 
             for (var clientHandler : clientHandlers) {
                 if (clientHandler.supports(host)) {
-                    botWebClient.sendUpdateRetry(new LinkUpdateRequest(
+                    linkUpdateSender.sendUpdate(new LinkUpdateRequest(
                         link.getId(),
                         URI.create(link.getLink()),
                         clientHandler.getUpdate(link),
