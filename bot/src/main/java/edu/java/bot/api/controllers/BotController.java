@@ -3,7 +3,6 @@ package edu.java.bot.api.controllers;
 import edu.java.bot.api.components.LinkUpdateRequest;
 import edu.java.bot.services.UpdateService;
 import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
