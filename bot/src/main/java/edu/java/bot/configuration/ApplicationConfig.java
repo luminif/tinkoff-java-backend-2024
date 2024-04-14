@@ -11,7 +11,9 @@ public record ApplicationConfig(
     @NotEmpty
     String telegramToken,
     @NotNull
-    Kafka kafka
+    Kafka kafka,
+    @NotNull
+    Micrometer micrometer
 ) {
     public record Kafka(
         String bootstrapServers,
@@ -20,6 +22,12 @@ public record ApplicationConfig(
         String groupId,
         String typeMappings,
         String trustedPackages
+    ) {
+    }
+
+    public record Micrometer(
+        String name,
+        String description
     ) {
     }
 }
