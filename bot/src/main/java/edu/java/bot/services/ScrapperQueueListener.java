@@ -17,7 +17,7 @@ public class ScrapperQueueListener {
     private final KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate;
     private final Logger logger = LogManager.getLogger();
 
-    @KafkaListener(topics = "${app.kafka.bad-topic-name}", groupId = "${app.kafka.group-id}")
+    @KafkaListener(topics = "${app.kafka.topic-name}", groupId = "${app.kafka.group-id}")
     public void listen(LinkUpdateRequest update) {
         try {
             updateService.handle(update);
