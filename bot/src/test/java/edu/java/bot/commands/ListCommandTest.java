@@ -32,14 +32,14 @@ public class ListCommandTest extends CommandTest {
 
     @Test
     void emptyLinkList() {
-        when(scrapperWebClient.getLinks(chatId)).thenReturn(new ListLinksResponse(new ArrayList<>(), 0));
+        when(scrapperWebClient.getLinksRetry(chatId)).thenReturn(new ListLinksResponse(new ArrayList<>(), 0));
         String actual = (String)listCommand.handle(update).getParameters().get("text");
         assertEquals("Нет отслеживаемых ресурсов", actual);
     }
 
     @Test
     void nonEmptyList() {
-        when(scrapperWebClient.getLinks(chatId))
+        when(scrapperWebClient.getLinksRetry(chatId))
             .thenReturn(new ListLinksResponse(List.of(new LinkResponse(7L, URI.create("github.com/luminif"))), 1));
         String actual = (String)listCommand.handle(update).getParameters().get("text");
         assertEquals("Список отслеживаемых ресурсов: \ngithub.com/luminif\n", actual);

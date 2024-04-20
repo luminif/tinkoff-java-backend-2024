@@ -39,7 +39,7 @@ public class UntrackCommand implements Command {
         }
 
         String link = segments[1];
-        List<LinkResponse> links = scrapperWebClient.getLinks(chatId).links();
+        List<LinkResponse> links = scrapperWebClient.getLinksRetry(chatId).links();
         boolean containsLink = links.stream().anyMatch(uri -> uri.url().toString().equals(link));
 
         if (!containsLink) {
@@ -47,7 +47,7 @@ public class UntrackCommand implements Command {
             return new SendMessage(chatId, "Ресурс %s ранее не отслеживался".formatted(link));
         }
 
-        LinkResponse response = scrapperWebClient.removeLink(chatId, new RemoveLinkRequest(URI.create(link)));
+        LinkResponse response = scrapperWebClient.removeLinkRetry(chatId, new RemoveLinkRequest(URI.create(link)));
         logger.info(response);
 
         logger.info("Resource %s was successfully removed from the tracked".formatted(link));

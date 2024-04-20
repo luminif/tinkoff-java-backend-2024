@@ -30,7 +30,7 @@ public class ListCommand implements Command {
     @Override
     public SendMessage handle(Update update) {
         long chatId = update.message().chat().id();
-        List<LinkResponse> links = scrapperWebClient.getLinks(chatId).links();
+        List<LinkResponse> links = scrapperWebClient.getLinksRetry(chatId).links();
 
         if (links.isEmpty()) {
             logger.info("There are no tracked resources");

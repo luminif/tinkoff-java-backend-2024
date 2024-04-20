@@ -19,7 +19,7 @@ public class JdbcLinkService implements LinkService {
         List<Link> links = jdbcLinkDao.findLinksById(chatId);
 
         for (var url : links) {
-            if (url.equals(link)) {
+            if (url.getLink().equals(link.getLink())) {
                 throw new LinkAlreadyAddedException("Ссылка уже добавлена в список отслеживаемых");
             }
         }

@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class StartCommandTest extends CommandTest {
@@ -26,6 +27,8 @@ public class StartCommandTest extends CommandTest {
 
     @Test
     void successfulRegistration() {
-        assertTrue(userService.register(chatId));
+        when(scrapperWebClient.registerChatRetry(chatId)).thenReturn("вы зарегались");
+        String actual = (String)startCommand.handle(update).getParameters().get("text");
+        assertEquals(actual, "Вы зарегистрировались. Чтобы узнать доступные команды, используйте /help");
     }
 }

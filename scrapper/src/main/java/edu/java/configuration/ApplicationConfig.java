@@ -13,7 +13,11 @@ public record ApplicationConfig(
     @NotNull
     String databaseAccessType
 ) {
-    public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay,
-    @NotNull Long timeForCheck) {
+    public record Scheduler(
+        boolean enable,
+        @NotNull Duration interval,
+        @NotNull Duration forceCheckDelay,
+        @NotNull Long timeForCheck
+    ) {
     }
 }

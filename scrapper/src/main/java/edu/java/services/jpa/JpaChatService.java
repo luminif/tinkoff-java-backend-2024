@@ -22,8 +22,8 @@ public class JpaChatService implements ChatService {
     }
 
     @Override
-    public void unregister(Long chatId) {
-        jpaChatRepository.deleteById(chatId);
+    public void unregister(Chat chat) {
+        jpaChatRepository.deleteById(chat.getId());
     }
 
     @Override

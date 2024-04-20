@@ -22,9 +22,9 @@ public class JdbcChatService implements ChatService {
     }
 
     @Override
-    public void unregister(Long chatId) {
-        isChatExists(chatId);
-        jdbcChatDao.delete(chatId);
+    public void unregister(Chat chat) {
+        isChatExists(chat.getId());
+        jdbcChatDao.delete(chat.getId());
     }
 
     @Override

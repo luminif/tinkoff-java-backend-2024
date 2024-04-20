@@ -46,7 +46,7 @@ public class TrackCommand implements Command {
             return new SendMessage(chatId, "Данный ресурс не поддерживается!");
         }
 
-        List<LinkResponse> links = scrapperWebClient.getLinks(chatId).links();
+        List<LinkResponse> links = scrapperWebClient.getLinksRetry(chatId).links();
         boolean linkIsAdded = links.stream().anyMatch(uri -> uri.url().toString().equals(link));
         String responseMessage;
 
@@ -54,7 +54,7 @@ public class TrackCommand implements Command {
             logger.info("Resource %s is already being tracked".formatted(link));
             responseMessage = "Ресурс %s ранее был добавлен в список отслеживаемых".formatted(link);
         } else {
-            LinkResponse response = scrapperWebClient.addLink(chatId, new AddLinkRequest(URI.create(link)));
+            LinkResponse response = scrapperWebClient.addLinkRetry(chatId, new AddLinkRequest(URI.create(link)));
             logger.info(response);
 
             responseMessage = "Ресурс %s добавлен в список отслеживаемых".formatted(link);
