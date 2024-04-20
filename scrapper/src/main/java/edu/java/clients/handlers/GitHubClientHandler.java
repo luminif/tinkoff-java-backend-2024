@@ -53,7 +53,7 @@ public class GitHubClientHandler implements ClientHandler {
                 .append(users.size() > 1 ? "%d новых коммитов от:".formatted(users.size())
                     : "Новый коммит от %s.".formatted(users.get(0))).append("\n");
             for (int i = 0; users.size() > 1 && i < users.size(); i++) {
-                text.append("%d) %s".formatted(i + 1, users.get(i)));
+                text.append("%d) %s".formatted(i + 1, users.get(i))).append("\n");
             }
         }
 
