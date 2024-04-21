@@ -36,12 +36,13 @@ public class JpaChatRepositoryTest extends IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        chat = new Chat(7L);
+        chat = new Chat(1337L);
         jpaChatRepository.save(chat);
     }
 
     @Test
     @Transactional
+    @Rollback
     void registerTest() {
         Optional<Chat> savedChat = jpaChatRepository.findById(chat.getId());
         assertNotNull(savedChat);
@@ -49,19 +50,21 @@ public class JpaChatRepositoryTest extends IntegrationTest {
 
     @Test
     @Transactional
+    @Rollback
     void unregisterTest() {
-        jpaChatRepository.deleteById(7L);
+        jpaChatRepository.deleteById(1337L);
         Optional<Chat> deletedChat = jpaChatRepository.findById(chat.getId());
         assertTrue(deletedChat.isEmpty());
     }
 
     @Test
     @Transactional
+    @Rollback
     void addTest() {
-        jpaLinkRepository.add(1L, 7L);
-        jpaLinkRepository.add(1L, 8L);
+        jpaLinkRepository.add(1L, 1337L);
+        jpaLinkRepository.add(1L, 8138L);
         List<Long> ids = jpaChatRepository.findAllIdsByLinkId(1L);
         assertNotNull(ids);
-        assertEquals(ids, List.of(7L, 8L));
+        assertEquals(ids, List.of(8L, 1337L, 8138L));
     }
 }
