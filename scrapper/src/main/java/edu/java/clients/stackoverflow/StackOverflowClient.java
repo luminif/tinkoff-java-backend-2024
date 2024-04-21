@@ -53,7 +53,8 @@ public class StackOverflowClient implements StackOverflowClientInterface {
             .get()
             .uri("/questions/{questionId}?site=stackoverflow", questionId)
             .retrieve()
-            .bodyToMono(StackOverflowResponse.class).block();
+            .bodyToMono(StackOverflowResponse.class)
+            .block();
     }
 
     @Override
@@ -67,7 +68,8 @@ public class StackOverflowClient implements StackOverflowClientInterface {
             .get()
             .uri("/questions/{questionId}/answers?order=desc&sort=creation&site=stackoverflow", questionId)
             .retrieve()
-            .bodyToMono(StackOverflowResponse.class).block();
+            .bodyToMono(StackOverflowResponse.class)
+            .block();
     }
 
     @Override

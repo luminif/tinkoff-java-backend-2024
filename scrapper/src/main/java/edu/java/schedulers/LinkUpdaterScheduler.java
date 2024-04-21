@@ -23,6 +23,7 @@ public class LinkUpdaterScheduler {
     private final LinkService linkService;
     private final List<ClientHandler> clientHandlers;
     private final LinkUpdateSender linkUpdateSender;
+    private static final String DELETE_MESSAGE = "похоже, ссылки больше нет. Она будет удалена.";
 
     @Scheduled(fixedDelayString = "${app.scheduler.interval}")
     void update() {
@@ -34,14 +35,22 @@ public class LinkUpdaterScheduler {
 
             for (var clientHandler : clientHandlers) {
                 if (clientHandler.supports(host)) {
-                    linkUpdateSender.sendUpdate(new LinkUpdateRequest(
+                    List<Long> tgChatIds = linkService.findIdsByLinkId(link.getId());
+
+                    LinkUpdateRequest linkUpdateRequest = new LinkUpdateRequest(
                         link.getId(),
                         URI.create(link.getLink()),
                         clientHandler.getUpdate(link),
-                        linkService.findIdsByLinkId(link.getId())
-                    ));
+                        tgChatIds
+                    );
 
-                    linkService.setLastUpdate(link.getId());
+                    linkUpdateSender.sendUpdate(linkUpdateRequest);
+
+                    if (linkUpdateRequest.description().equals(DELETE_MESSAGE)) {
+                        tgChatIds.forEach(chatId -> linkService.remove(chatId, link));
+                    } else {
+                        linkService.setLastUpdate(link.getId());
+                    }
                 }
             }
         });
