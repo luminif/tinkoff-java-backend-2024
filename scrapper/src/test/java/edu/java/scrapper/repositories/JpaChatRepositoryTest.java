@@ -61,10 +61,10 @@ public class JpaChatRepositoryTest extends IntegrationTest {
     @Transactional
     @Rollback
     void addTest() {
-        jpaLinkRepository.add(1L, 1337L);
-        jpaLinkRepository.add(1L, 8138L);
-        List<Long> ids = jpaChatRepository.findAllIdsByLinkId(1L);
+        jpaLinkRepository.add(31L, 1337L);
+        jpaLinkRepository.add(31L, 8138L);
+        List<Long> ids = jpaChatRepository.findAllIdsByLinkId(31L);
         assertNotNull(ids);
-        assertEquals(ids, List.of(8L, 1337L, 8138L));
+        assertEquals(ids, List.of(1337L, 8138L));
     }
 }
