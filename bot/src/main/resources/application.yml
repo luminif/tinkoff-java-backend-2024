@@ -7,6 +7,9 @@ app:
     group-id: bot
     type-mappings: edu.java.api.components.LinkUpdateRequest:edu.java.bot.api.components.LinkUpdateRequest
     trusted-packages: "*"
+  micrometer:
+    name: updates_counter
+    description: count of updates processed
 
 spring:
   application:
@@ -16,6 +19,23 @@ spring:
 
 server:
   port: 8090
+
+management:
+  server:
+    port: 8091
+
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: info, health, prometheus
+      path-mapping:
+        prometheus: /metrics
+    enabled-by-default: true
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 logging:
   config: classpath:log4j2-plain.xml
