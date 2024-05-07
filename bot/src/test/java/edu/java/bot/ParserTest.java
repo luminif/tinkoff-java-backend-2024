@@ -15,7 +15,7 @@ public class ParserTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {".", "12345", "/"})
+    @ValueSource(strings = {".", "12345", "/", "https://stackoverflow.com/search?q=unsupported%20link"})
     void invalidFormat(String link) {
         assertFalse(LinkParser.checkLink(link));
     }
